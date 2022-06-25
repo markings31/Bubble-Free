@@ -1,0 +1,183 @@
+# !-----------------------------------------------------------------------------------------------!
+#                       Welcome to the main configuration of ${project.name}
+# !-----------------------------------------------------------------------------------------------!
+#
+#    For support and documentation, please visit:
+#    - https://github.com/markings31/${project.name}/wiki
+#
+# !-----------------------------------------------------------------------------------------------!
+#    1) COLOR CODES are supported with the '&' character.
+#       - For usage, see http://minecraftwiki.net/wiki/Formatting_codes
+#       - When you use them, place quotes around the message like this: "Hello &cworld."
+#       - To use HEX colors, use #123456 syntax: "Hello #123456world."
+#
+#    2) TO HIDE any message, set it to 'none'.
+#
+#    3) For UNICODE CHARACTERS (smileys, symbols, ..), save the file in UTF-8 encoding. See
+#       - https://github.com/markings31/${project.name}/wiki/Use-Right-Encoding
+#
+#    4) JSON is supported.
+#       - For usage, see https://github.com/markings31/${project.name}/wiki/JSON
+# !-----------------------------------------------------------------------------------------------!
+
+# -------------------------------------------------------------------------------------------------
+# Notifications Section
+# -------------------------------------------------------------------------------------------------
+Notifications:
+
+  # Broadcast Messages
+  Broadcast:
+
+    # Enable broadcast messages?
+    Enable: true
+
+    # The delay between each broadcast message.
+    Delay: 90 seconds
+
+    # Should the broadcast messages be outputted randomly?
+    # Setting this to false will broadcast them in order.
+    Random_Message: false
+
+    # Should all broadcast messages be centered automatically?
+    Center_All: false
+
+    # Do you want messages to be sent asynchronously? (may improve performance)
+    Send_Asynchronously: true
+
+    # What sound should be played when a message is broadcast?
+    # A list of the compatible values can be found here:
+    # https://gist.github.com/NiklasEi/7bd0ffd136f8459df0940e4501d47a8a
+    Sound: NOTE_PLING, 1F, 1.5F
+
+    Header: "&8%chat_line_smooth%"
+    Footer: "&8%chat_line_smooth%"
+
+  # Welcome Messages
+  Welcome:
+
+    # Should the message of the day be displayed to users on-join?
+    Enable_MOTD: true
+
+    # The delay between when the player joins and when the message is
+    # sent. Used to separate the MOTD message from other server messages
+    # that could backup the chat.
+    MOTD_Delay: 1 second
+
+    # What sound should be played when the player joins?
+    # A list of the compatible values can be found here:
+    # https://gist.github.com/NiklasEi/7bd0ffd136f8459df0940e4501d47a8a
+    Sound: LEVEL_UP, 1F, 1.5F
+
+    # The message sent to players on-join.
+    Join_MOTD:
+      - '<center>&8%chat_line%'
+      - '<center>&7Welcome to %server_name%, &b%player%&7!'
+      - '<center>&f'
+      - '<center>&bWebsite: &fyourserver.com'
+      - '<center>&bDiscord: &fdiscord.com/yourserver'
+      - '<center>&bTwitter: &ftwitter.com/yourserver'
+      - '<center>&8%chat_line%'
+
+  # Join Messages
+  Join:
+
+    # Should our join messages be broadcast to the server when a player joins?
+    Enable_Join_Message: false
+
+    # Should our join messages be broadcast to the server when a player quits?
+    Enable_Quit_Message: false
+
+    # Should a firework be launched whenever a new player joins the server?
+    Firework_On_First_Join: false
+
+    # Should join/quit messages be silenced if a player is vanished?
+    Mute_If_Vanished: true
+
+    # If the above option is enabled, the message will only be broadcast to these worlds.
+    Worlds:
+      - 'world'
+
+    Join_Message: "&8[&a+&8] &a%player%"
+
+    Quit_Message: "&8[&c-&8] &c%player%"
+
+# -------------------------------------------------------------------------------------------------
+# Chat Section
+# -------------------------------------------------------------------------------------------------
+Chat:
+
+  # Mentions System
+  Mentions:
+
+    # Should players be notified when they are mentioned in the chat (prepended by the @ symbol)?
+    Enable: true
+
+    # What permission should players have if they don't want to be notified when they are mentioned in the chat?
+    Ignore_Permission: "mentions.ignore"
+
+    # What color should the player name be highlighted with when mentioned in the chat?
+    Color: '&e'
+
+    # What sound should be played when the is mentioned in the chat?
+    # A list of the compatible values can be found here:
+    # https://gist.github.com/NiklasEi/7bd0ffd136f8459df0940e4501d47a8a
+    Sound: ORB_PICKUP
+
+# -------------------------------------------------------------------------------------------------
+# Database Section
+# -------------------------------------------------------------------------------------------------
+Database:
+
+  # Should we connect to the MySQL database upon plugin startup?
+  # Note: MySQL credentials can be found in the mysql.yml file.
+  Enable_MySQL: false
+
+# -------------------------------------------------------------------------------------------------
+# Hooks Section
+# -------------------------------------------------------------------------------------------------
+Hooks:
+
+  # Hook into the Vault library?
+  Vault: true
+
+  # Hook into the PlaceholderAPI library?
+  PlaceholderAPI: true
+
+  # Hook into BStats in order to collect usage statistics?
+  BStats: true
+
+# -------------------------------------------------------------------------------------------------
+# The plugin's main prefix. You can manually add this prefix to other messages using the
+# {plugin_prefix} placeholder.
+# -------------------------------------------------------------------------------------------------
+Prefix: "&8[&b&l${project.name}&8]&7 "
+
+# -------------------------------------------------------------------------------------------------
+# The language used for plugin messages. If the given language is available, the plugin will
+# create the appropriate messages_<locale>.yml file in the localization directory.
+# -------------------------------------------------------------------------------------------------
+Locale: "en"
+
+# -------------------------------------------------------------------------------------------------
+# The commands that are used for the plugin. You may edit them here.
+# -------------------------------------------------------------------------------------------------
+Command_Aliases: [ bubble, bu ]
+
+# -------------------------------------------------------------------------------------------------
+# The time (in milliseconds) used to measure plugin operations.
+#
+# WARNING: DO NOT EDIT THIS!
+# -------------------------------------------------------------------------------------------------
+Log_Lag_Over_Milis: 100
+
+# -------------------------------------------------------------------------------------------------
+# Used to debug plugin features. Only change this if instructed to by the plugin author.
+# -------------------------------------------------------------------------------------------------
+Debug: [ ]
+
+# -------------------------------------------------------------------------------------------------
+# The config file version.
+#
+# WARNING: DO NOT EDIT THIS!
+# -------------------------------------------------------------------------------------------------
+Version: 1

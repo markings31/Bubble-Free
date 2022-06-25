@@ -1,2 +1,1 @@
-# Bubble-Free
-An easy, powerful, and customizable notifications and chat tool for Minecraft servers.
+![Bubble Banner](https://i.ibb.co/GMm5H7d/Bubble-Banner-1.png)
