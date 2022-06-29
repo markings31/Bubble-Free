@@ -5,6 +5,7 @@ import me.markings.bubble.model.Permissions;
 import me.markings.bubble.util.MessageUtil;
 import org.bukkit.entity.Player;
 import org.mineacademy.fo.Common;
+import org.mineacademy.fo.TimeUtil;
 import org.mineacademy.fo.command.SimpleSubCommand;
 import org.mineacademy.fo.model.Variables;
 import org.mineacademy.fo.remain.CompMaterial;
@@ -42,7 +43,6 @@ public class NotificationCommand extends SimpleSubCommand {
 
 	private void sendNotification(final Player target) {
 		val inputs = joinArgs((args[1].equalsIgnoreCase(toastArg) ? 3 : 2)).split("\\|");
-		final String allInputs = String.join("", args);
 
 		val primaryPart = Variables.replace(inputs[0], target);
 		val secondaryPart = Variables.replace(inputs.length == 1 ? "" : inputs[1], target);
@@ -51,7 +51,7 @@ public class NotificationCommand extends SimpleSubCommand {
 			case "message":
 				if (getPlayer() != null)
 					checkBoolean(getPlayer().hasPermission(getPermission() + ".message"), noPermissionMsg);
-				Common.tell(target, Common.colorize(primaryPart));
+				Common.tellNoPrefix(target, Common.colorize(primaryPart));
 				break;
 			case "title":
 				if (getPlayer() != null)
@@ -67,7 +67,8 @@ public class NotificationCommand extends SimpleSubCommand {
 			case "bossbar":
 				if (getPlayer() != null)
 					checkBoolean(getPlayer().hasPermission(getPermission() + ".bossbar"), noPermissionMsg);
-				Remain.sendBossbarPercent(target, primaryPart, 100);
+
+				Remain.sendBossbarTimed(target, primaryPart, !secondaryPart.isEmpty() ? (int) TimeUtil.toTicks(secondaryPart) / 20 : 5);
 				break;
 			case "toast":
 				if (getPlayer() != null)
@@ -83,7 +84,7 @@ public class NotificationCommand extends SimpleSubCommand {
 	protected String[] getMultilineUsageMessage() {
 		val commandLabel = "&f/bu " + getSublabel();
 		return new String[]{
-				commandLabel + " <player_name/all> message [image] [height] <input>&7 - Send/announce a standard chat message. ",
+				commandLabel + " <player_name/all> message <input>&7 - Send/announce a standard chat message. ",
 				commandLabel + " <player_name/all> title <input|...>&7 - Send/announce a title message.",
 				commandLabel + " <player_name/all> actionbar <input>&7 - Send/announce an action bar message.",
 				commandLabel + " <player_name/all> bossbar <input>&7 - Send/announce a bossbar message.",

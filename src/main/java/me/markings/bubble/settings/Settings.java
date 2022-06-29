@@ -65,35 +65,6 @@ public final class Settings extends SimpleSettings {
 	}
 
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
-	public final static class JoinSettings {
-
-		public static String JOIN_MESSAGE;
-		public static String QUIT_MESSAGE;
-
-		public static Boolean ENABLE_JOIN_MESSAGE;
-		public static Boolean ENABLE_QUIT_MESSAGE;
-		public static Boolean FIREWORK_JOIN;
-		public static Boolean MUTE_IF_VANISHED;
-
-		public static List<String> BROADCAST_WORLDS = new ArrayList<>();
-
-		private static void init() {
-			setPathPrefix("Notifications.Join");
-			ENABLE_JOIN_MESSAGE = getBoolean("Enable_Join_Message");
-			ENABLE_QUIT_MESSAGE = getBoolean("Enable_Quit_Message");
-
-			FIREWORK_JOIN = getBoolean("Firework_On_First_Join");
-
-			MUTE_IF_VANISHED = getBoolean("Mute_If_Vanished");
-
-			BROADCAST_WORLDS = getStringList("Worlds");
-
-			JOIN_MESSAGE = getString("Join_Message");
-			QUIT_MESSAGE = getString("Quit_Message");
-		}
-	}
-
-	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public final static class ChatSettings {
 
 		public static Boolean ENABLE_MENTIONS;

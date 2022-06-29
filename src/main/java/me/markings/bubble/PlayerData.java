@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.val;
 import me.markings.bubble.api.Cache;
 import org.bukkit.entity.Player;
+import org.mineacademy.fo.collection.SerializedMap;
 import org.mineacademy.fo.remain.Remain;
 import org.mineacademy.fo.settings.YamlConfig;
 
@@ -52,12 +53,21 @@ public final class PlayerData extends YamlConfig implements Cache {
 
 	@Override
 	protected void onSave() {
-		set("Receive_Broadcasts", this.broadcastStatus);
-		set("Receive_Broadcast_Sound", this.broadcastSoundStatus);
-		set("Receive_MOTD", motdStatus);
-		set("Receive_Mentions", mentionsStatus);
-		set("Receive_Mention_Sound", mentionSoundStatus);
-		set("Receive_Mentions_Toast", mentionToastStatus);
+		super.onSave();
+	}
+
+	@Override
+	public SerializedMap saveToMap() {
+		final SerializedMap map = new SerializedMap();
+
+		map.putIfExist("Receive_Broadcasts", this.broadcastStatus);
+		map.putIfExist("Receive_Broadcast_Sound", this.broadcastSoundStatus);
+		map.putIfExist("Receive_MOTD", this.motdStatus);
+		map.putIfExist("Receive_Mentions", this.mentionsStatus);
+		map.putIfExist("Receive_Mention_Sound", this.mentionSoundStatus);
+		map.putIfExist("Receive_Mentions_Toast", this.mentionToastStatus);
+
+		return map;
 	}
 
 	@Override

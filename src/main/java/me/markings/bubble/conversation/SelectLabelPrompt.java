@@ -3,11 +3,9 @@ package me.markings.bubble.conversation;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.val;
-import me.markings.bubble.Bubble;
+import me.markings.bubble.settings.Broadcasts;
 import me.markings.bubble.settings.Localization;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
@@ -30,13 +28,16 @@ public class SelectLabelPrompt extends SimplePrompt {
 		return Localization.PromptMessages.LABEL_PROMPT_MESSAGE;
 	}
 
+	@Override
+	protected String getCustomPrefix() {
+		return "";
+	}
+
 	@Nullable
 	@Override
 	protected Prompt acceptValidatedInput(@NotNull final ConversationContext conversationContext, @NotNull final String s) {
-		val config = YamlConfiguration.loadConfiguration(Bubble.settingsFile);
-		val path = "Notifications.Broadcast.Messages." + s;
 
-		if (!config.isSet(path))
+		if (Broadcasts.getBroadcast(s) == null)
 			Messenger.error((CommandSender) conversationContext.getForWhom(), "&cCould not find message group " + s + "!");
 		else
 			Common.dispatchCommandAsPlayer((Player) conversationContext.getForWhom(), "bu edit " + s);

@@ -4,7 +4,6 @@ import lombok.*;
 import me.markings.bubble.PlayerData;
 import me.markings.bubble.settings.Settings;
 import me.markings.bubble.util.MessageUtil;
-import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,9 +24,6 @@ public class PlayerJoinListener implements Listener {
 	@SneakyThrows
 	public void onJoin(final @NotNull PlayerJoinEvent event) {
 		val player = event.getPlayer();
-		event.setJoinMessage(Settings.JoinSettings.ENABLE_JOIN_MESSAGE.equals(Boolean.TRUE) ?
-				Common.colorize(Variables.replace(Settings.JoinSettings.JOIN_MESSAGE, player)) : event.getJoinMessage());
-
 		val cache = PlayerData.getCache(player);
 
 		val messages = Settings.WelcomeSettings.JOIN_MOTD;
@@ -38,7 +34,6 @@ public class PlayerJoinListener implements Listener {
 		Debugger.debug("join",
 				"Player: " + player +
 						" Cache: " + cache +
-						"Enable Join Message: " + Settings.JoinSettings.ENABLE_JOIN_MESSAGE +
 						"Enable Join MOTD: " + Settings.WelcomeSettings.ENABLE_JOIN_MOTD);
 
 		if (Settings.WelcomeSettings.ENABLE_JOIN_MOTD.equals(Boolean.TRUE) && cache.isMotdStatus())
@@ -48,14 +43,11 @@ public class PlayerJoinListener implements Listener {
 						MessageUtil.executePlaceholders(Variables.replace(message, player), player);
 						return;
 					}
-					Common.tellNoPrefix(player, MessageUtil.replaceVarsAndGradient(message, player));
+					message = Variables.replace(message, player);
+					Common.tellNoPrefix(player, MessageUtil.translateGradient(message));
 				});
 				new SimpleSound(motdSound.getSound(), motdSound.getVolume(), motdSound.getPitch()).play(player);
 			});
-
-		if (Settings.JoinSettings.FIREWORK_JOIN.equals(Boolean.TRUE) && !player.hasPlayedBefore())
-			player.getWorld().spawn(player.getLocation(), Firework.class);
-
 	}
 
 	@EventHandler

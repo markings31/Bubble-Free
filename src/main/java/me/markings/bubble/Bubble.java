@@ -21,14 +21,11 @@ import org.mineacademy.fo.plugin.SimplePlugin;
 import org.mineacademy.fo.remain.Remain;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 public final class Bubble extends SimplePlugin {
 
-	public static final File settingsFile = new File("plugins/Bubble/", FoConstants.File.SETTINGS);
+	public static final File settingsFile = new File("plugins/Bubble", FoConstants.File.SETTINGS);
 
 	private final BubbleDatabase database = BubbleDatabase.getInstance();
 
@@ -39,7 +36,6 @@ public final class Bubble extends SimplePlugin {
 
 	@Override
 	protected void onPluginPreReload() {
-		//Broadcasts.setMessages(null);
 		Settings.WelcomeSettings.JOIN_MOTD.clear();
 
 		DatabaseFile.getInstance().reload();
@@ -75,8 +71,7 @@ public final class Bubble extends SimplePlugin {
 
 		Variables.addExpansion(Placeholders.getInstance());
 
-		if (Settings.WelcomeSettings.ENABLE_JOIN_MOTD.equals(Boolean.TRUE) ||
-				Settings.JoinSettings.FIREWORK_JOIN.equals(Boolean.TRUE))
+		if (Settings.WelcomeSettings.ENABLE_JOIN_MOTD.equals(Boolean.TRUE))
 			registerEvents(PlayerJoinListener.getInstance());
 
 		if (Settings.ChatSettings.ENABLE_MENTIONS.equals(Boolean.TRUE))
@@ -96,17 +91,6 @@ public final class Bubble extends SimplePlugin {
 		MenuSettings.ChatMenuSettings.getInstance().save();
 		MenuSettings.MOTDMenuSettings.getInstance().save();
 		MenuSettings.MentionsMenuSettings.getInstance().save();
-	}
-
-	@Override
-	public Set<String> getConsoleFilter() {
-		return new HashSet<>(Arrays.asList(
-				"Reloading plugin Bubble",
-				"______________________________________________________________",
-				"[PlaceholderAPI] Successfully registered expansion: bubble",
-				"[Bubble] Bubble has been successfully enabled!",
-				"  ",
-				"issued server command: /#flp"));
 	}
 
 	@Override

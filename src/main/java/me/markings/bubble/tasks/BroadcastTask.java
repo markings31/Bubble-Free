@@ -12,6 +12,7 @@ import org.mineacademy.fo.Common;
 import org.mineacademy.fo.RandomUtil;
 import org.mineacademy.fo.debug.Debugger;
 import org.mineacademy.fo.model.SimpleSound;
+import org.mineacademy.fo.model.Variables;
 import org.mineacademy.fo.remain.Remain;
 
 import java.util.List;
@@ -79,11 +80,10 @@ public class BroadcastTask extends BukkitRunnable {
 	}
 
 	private static void sendMessages(final List<String> messages, final Player player) {
-		val header = Settings.BroadcastSettings.HEADER;
-		val footer = Settings.BroadcastSettings.FOOTER;
-		Common.tellNoPrefix(player, MessageUtil.replaceVarsAndGradient(header, player), "&f");
+		val header = Variables.replace(Settings.BroadcastSettings.HEADER, null);
+		val footer = Variables.replace(Settings.BroadcastSettings.FOOTER, null);
+		Common.tellNoPrefix(player, MessageUtil.translateGradient(header), "&f");
 		messages.forEach(message -> {
-
 			if (MessageUtil.isExecutable(message)) {
 				MessageUtil.executePlaceholders(message, player);
 				return;
@@ -94,9 +94,11 @@ public class BroadcastTask extends BukkitRunnable {
 			if (Boolean.TRUE.equals(Broadcasts.getCenteredFromMessage(messages)))
 				message = ChatUtil.center(message);
 
-			Common.tellNoPrefix(player, MessageUtil.replaceVarsAndGradient(message, player));
+			message = Variables.replace(message, player);
+
+			Common.tellNoPrefix(player, MessageUtil.translateGradient(message));
 		});
-		Common.tellNoPrefix(player, "&f", MessageUtil.replaceVarsAndGradient(footer, player));
+		Common.tellNoPrefix(player, "&f", MessageUtil.translateGradient(footer));
 	}
 
 	private static void updateIndex() {

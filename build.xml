@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE xml>
-<xml name="Bubble" default="Build">
+<project name="Bubble" default="Build">
 
     <!-- We use this file to compile your plugin to your plugins/ directory
          automatically and use the hot swap (also known as live debug) feature.
@@ -48,4 +48,4 @@
         </jar>-->
     </target>
 
-</xml>
+</project>

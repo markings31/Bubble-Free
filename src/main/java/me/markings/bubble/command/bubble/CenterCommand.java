@@ -1,15 +1,12 @@
 package me.markings.bubble.command.bubble;
 
 import lombok.val;
-import me.markings.bubble.Bubble;
 import me.markings.bubble.model.Permissions;
-import me.markings.bubble.util.ConfigUtil;
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.markings.bubble.settings.Broadcasts;
 import org.mineacademy.fo.command.SimpleSubCommand;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CenterCommand extends SimpleSubCommand {
 
@@ -24,21 +21,15 @@ public class CenterCommand extends SimpleSubCommand {
 
 	@Override
 	protected void onCommand() {
-		val config = YamlConfiguration.loadConfiguration(Bubble.settingsFile);
-		val centerPath = "Notifications.Broadcast.Messages." + args[0] + ".Centered";
-		val centerAllPath = "Notifications.Broadcast.Center_All";
+		val label = args[0];
 
 		if (args[0].equalsIgnoreCase("all")) {
-			config.set(centerAllPath, !config.getBoolean(centerAllPath));
-
-			ConfigUtil.saveConfig(getPlayer(),
-					"&aSuccessfully toggled centered status of all messages to "
-							+ (config.getBoolean(centerAllPath) ? "&aENABLED" : "&cDISABLED"),
-					"&cFailed to center message! Error: ", config);
+			Broadcasts.toggleCenteredAll();
 		} else {
-			checkBoolean(config.contains(centerPath), "No configuration section " + args[0] + " found!");
-			ConfigUtil.toggleCentered(centerPath, getPlayer());
+			Broadcasts.getBroadcast(label).toggleCentered();
 		}
+
+		tellSuccess("&aSuccessfully toggled centering for broadcast " + label + "!");
 	}
 
 	@Override
@@ -55,9 +46,7 @@ public class CenterCommand extends SimpleSubCommand {
 	@Override
 	protected List<String> tabComplete() {
 		if (args.length == 1)
-			return completeLastWord(Objects.requireNonNull(
-					YamlConfiguration.loadConfiguration(Bubble.settingsFile).
-							getConfigurationSection("Notifications.Broadcast.Messages")).getValues(false).keySet(), "all");
+			return completeLastWord(Broadcasts.getAllBroadcastNames(), "all");
 
 		return new ArrayList<>();
 	}

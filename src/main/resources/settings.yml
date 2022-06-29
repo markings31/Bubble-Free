@@ -49,8 +49,8 @@ Notifications:
     # https://gist.github.com/NiklasEi/7bd0ffd136f8459df0940e4501d47a8a
     Sound: NOTE_PLING, 1F, 1.5F
 
-    Header: "&8%chat_line_smooth%"
-    Footer: "&8%chat_line_smooth%"
+    Header: "&8{chat_line_smooth}"
+    Footer: "&8{chat_line_smooth}"
 
   # Welcome Messages
   Welcome:
@@ -70,36 +70,13 @@ Notifications:
 
     # The message sent to players on-join.
     Join_MOTD:
-      - '<center>&8%chat_line%'
-      - '<center>&7Welcome to %server_name%, &b%player%&7!'
+      - '<center>&8{chat_line}'
+      - '<center>&7Welcome to the server, &b{player}&7!'
       - '<center>&f'
       - '<center>&bWebsite: &fyourserver.com'
       - '<center>&bDiscord: &fdiscord.com/yourserver'
       - '<center>&bTwitter: &ftwitter.com/yourserver'
-      - '<center>&8%chat_line%'
-
-  # Join Messages
-  Join:
-
-    # Should our join messages be broadcast to the server when a player joins?
-    Enable_Join_Message: false
-
-    # Should our join messages be broadcast to the server when a player quits?
-    Enable_Quit_Message: false
-
-    # Should a firework be launched whenever a new player joins the server?
-    Firework_On_First_Join: false
-
-    # Should join/quit messages be silenced if a player is vanished?
-    Mute_If_Vanished: true
-
-    # If the above option is enabled, the message will only be broadcast to these worlds.
-    Worlds:
-      - 'world'
-
-    Join_Message: "&8[&a+&8] &a%player%"
-
-    Quit_Message: "&8[&c-&8] &c%player%"
+      - '<center>&8{chat_line}'
 
 # -------------------------------------------------------------------------------------------------
 # Chat Section

@@ -3,12 +3,9 @@ package me.markings.bubble.conversation;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.val;
-import me.markings.bubble.Bubble;
 import me.markings.bubble.command.bubble.EditCommand;
+import me.markings.bubble.settings.Broadcasts;
 import me.markings.bubble.settings.Localization;
-import me.markings.bubble.util.ConfigUtil;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
@@ -32,6 +29,11 @@ public class PermissionPrompt extends SimplePrompt {
 	}
 
 	@Override
+	protected String getCustomPrefix() {
+		return "";
+	}
+
+	@Override
 	protected boolean isInputValid(final ConversationContext context, final String input) {
 		return Valid.isInteger(input);
 	}
@@ -44,14 +46,7 @@ public class PermissionPrompt extends SimplePrompt {
 	@Nullable
 	@Override
 	protected Prompt acceptValidatedInput(@NotNull final ConversationContext context, @NotNull final String input) {
-		val config = YamlConfiguration.loadConfiguration(Bubble.settingsFile);
-		val commandArg = EditCommand.getInput();
-		val newSection = "Notifications.Broadcast.Messages." + commandArg;
-
-		config.set(newSection + ".Permission", input);
-		ConfigUtil.saveConfig((Player) context.getForWhom(),
-				"&aSuccessfully changed permission in section " + commandArg + " to " + input + "!",
-				"Failed to change permission! Error: ", config);
+		Broadcasts.getBroadcast(EditCommand.getInput()).setPermission(input);
 
 		return Prompt.END_OF_CONVERSATION;
 	}

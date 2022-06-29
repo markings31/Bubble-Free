@@ -8,11 +8,8 @@ import org.bukkit.entity.Player;
 import org.mineacademy.fo.ChatUtil;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.Valid;
-import org.mineacademy.fo.model.HookManager;
-import org.mineacademy.fo.model.Variables;
 import org.mineacademy.fo.remain.CompChatColor;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,12 +17,6 @@ import java.util.stream.IntStream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MessageUtil {
-
-
-	@Getter
-	static final String gradientPlaceholder = "<gradient:";
-	@Getter
-	static final String gradientEndPlaceholder = "</gradient>";
 
 	@Getter
 	private static final String commandPlaceholder = "<command>";
@@ -54,10 +45,10 @@ public class MessageUtil {
 	private static final String flashPlaceholder = "{flash:";
 	//private static final String scrollingGradientPlaceholder = "{g:";
 
-	private static final String gradientPattern = "^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})$:^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})$";
+	private static final String gradientPattern = "^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}):([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
 
 	public static String format(final String message) {
-		val fancyLinePlaceholder = "%fancy_line%";
+		val fancyLinePlaceholder = "{fancy_line}";
 		if (message.contains(fancyLinePlaceholder))
 			return message.replace(fancyLinePlaceholder, "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 
@@ -109,8 +100,6 @@ public class MessageUtil {
 		colors.add(CompChatColor.of(message.substring(colonIndex - 7, colonIndex - 1)));
 		colors.add(CompChatColor.of(message.substring(colonIndex + 1, colonIndex + 7)));
 
-		Common.broadcast("test");
-
 		return colors;
 	}
 
@@ -125,26 +114,19 @@ public class MessageUtil {
 	}
 
 	public static String translateGradient(final String message) {
-		val newMessage = stripPlaceholders(message.replace("§", "&"));
+		val newMessage = stripPlaceholders(Common.revertColorizing(message));
 
-		if (newMessage.contains(gradientPlaceholder) && newMessage.contains(gradientEndPlaceholder)) {
-			val firstColor = newMessage.substring(newMessage.indexOf(":") + 1, newMessage.indexOf("|"));
-			val secondColor = newMessage.substring(newMessage.indexOf("|") + 1, newMessage.indexOf(">"));
-			val fullGradientPrefix = gradientPlaceholder + firstColor + "|" + secondColor + ">";
-			return getPlaceholder(message) + ChatUtil.generateGradient(newMessage.replace(fullGradientPrefix, "")
-					.replace(gradientEndPlaceholder, ""), CompChatColor.of(firstColor), CompChatColor.of(secondColor)) + "&r";
+		if (containsGradient(newMessage)) {
+			val firstColor = "#" + newMessage.substring(newMessage.indexOf(":") - 6, newMessage.indexOf(":"));
+			val secondColor = "#" + newMessage.substring(newMessage.indexOf(":") + 1, newMessage.indexOf(":") + 7);
+			val previousMessage = newMessage.substring(0, newMessage.indexOf(":") - 6);
+			val followingMessage = newMessage.substring(newMessage.indexOf(":") + 7);
+
+			return getPlaceholder(message) + previousMessage + ChatUtil.generateGradient(followingMessage,
+					CompChatColor.of(firstColor), CompChatColor.of(secondColor)) + "&r";
 		}
-		
+
 		return message;
-	}
-
-	public static Color getColor(final String color) {
-		try {
-			val field = Class.forName("java.awt.Color").getField(color);
-			return (Color) field.get(null);
-		} catch (final Exception e) {
-			return null;
-		}
 	}
 
 	public static void executePlaceholders(final String message, final Player player) {
@@ -227,15 +209,13 @@ public class MessageUtil {
 	}
 
 	public static boolean containsGradient(final String message) {
-		return message.contains(gradientPlaceholder) && message.contains(gradientEndPlaceholder);
-	}
+		final String gradientPrefix;
+		if (message.contains(":")) {
+			gradientPrefix = message.substring(message.indexOf(":") - 6, message.indexOf(":") + 7);
 
-	public static String replaceVarsAndGradient(final String message, final Player player) {
-		val translatedSegment = containsGradient(message) ? message.substring(message.indexOf("<"), message.lastIndexOf('>') + 1) : message;
-		val strippedMessage = containsGradient(message)
-				? message.substring(message.indexOf('<') + 1, message.indexOf(getGradientEndPlaceholder()))
-				: message;
-		val replacedMessage = HookManager.replacePlaceholders(player, Variables.replace(format(strippedMessage), player));
-		return message.replace(translatedSegment, translateGradient(translatedSegment.replace(strippedMessage, replacedMessage)));
+			return gradientPrefix.matches(gradientPattern);
+		}
+
+		return false;
 	}
 }

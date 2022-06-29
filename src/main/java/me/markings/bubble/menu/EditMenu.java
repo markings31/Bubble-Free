@@ -1,12 +1,10 @@
 package me.markings.bubble.menu;
 
 import lombok.val;
-import me.markings.bubble.Bubble;
 import me.markings.bubble.command.bubble.EditCommand;
 import me.markings.bubble.conversation.EditMessagePrompt;
 import me.markings.bubble.conversation.PermissionPrompt;
-import me.markings.bubble.util.ConfigUtil;
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.markings.bubble.settings.Broadcasts;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -41,10 +39,10 @@ public class EditMenu extends Menu {
 		centerMessageButton = new Button() {
 			@Override
 			public void onClickedInMenu(final Player player, final Menu menu, final ClickType click) {
-				val path = EditCommand.getInput();
-				val centerPath = "Notifications.Broadcast.Messages." + path + ".Centered";
-				ConfigUtil.toggleCentered(centerPath, player);
-				animateTitle(((YamlConfiguration.loadConfiguration(Bubble.settingsFile).getBoolean(centerPath) ? "&a&lENABLED" : "&cDISABLED") + " &7&lcentering!"));
+				val broadcastName = EditCommand.getInput();
+
+				Broadcasts.getBroadcast(broadcastName).toggleCentered();
+				animateTitle(((Boolean.TRUE.equals(Broadcasts.getBroadcast(broadcastName).getCentered()) ? "&a&lENABLED" : "&cDISABLED") + " &7&lcentering!"));
 			}
 
 			@Override

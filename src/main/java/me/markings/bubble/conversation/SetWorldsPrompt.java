@@ -1,11 +1,10 @@
 package me.markings.bubble.conversation;
 
 import lombok.*;
-import me.markings.bubble.Bubble;
+import me.markings.bubble.command.bubble.EditCommand;
+import me.markings.bubble.settings.Broadcasts;
 import me.markings.bubble.settings.Localization;
-import me.markings.bubble.util.ConfigUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
@@ -14,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import org.mineacademy.fo.Messenger;
 import org.mineacademy.fo.conversation.SimplePrompt;
 import org.mineacademy.fo.remain.Remain;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SetWorldsPrompt extends SimplePrompt {
@@ -25,6 +27,11 @@ public class SetWorldsPrompt extends SimplePrompt {
 	protected String getPrompt(final ConversationContext context) {
 		Remain.sendTitle((Player) context.getForWhom(), "&9Set Worlds", "Please type your message in the chat.");
 		return Localization.PromptMessages.WORLDS_PROMPT_MESSAGE;
+	}
+
+	@Override
+	protected String getCustomPrefix() {
+		return "";
 	}
 
 	@Override
@@ -47,21 +54,9 @@ public class SetWorldsPrompt extends SimplePrompt {
 	@Nullable
 	@Override
 	protected Prompt acceptValidatedInput(@NotNull final ConversationContext conversationContext, @NotNull final String s) {
-		val config = YamlConfiguration.loadConfiguration(Bubble.settingsFile);
-		val inputs = s.contains(" ") ? s.split(", ") : s.split(",");
-		val newSection = "Notifications.Join.Worlds";
+		val worlds = new ArrayList<>(Arrays.asList(s.split(", ")));
 
-		val section = config.getStringList(newSection);
-
-		section.clear();
-		for (final String message : inputs) {
-			section.add(message);
-			config.set(newSection, section);
-		}
-
-		ConfigUtil.saveConfig((Player) conversationContext.getForWhom(),
-				"&aSuccessfully set worlds to '" + s + "'&a!",
-				"&cFailed to set worlds! Error: ", config);
+		Broadcasts.getBroadcast(EditCommand.getInput()).setWorlds(worlds);
 
 		return Prompt.END_OF_CONVERSATION;
 	}

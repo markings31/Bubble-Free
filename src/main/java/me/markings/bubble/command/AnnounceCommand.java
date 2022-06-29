@@ -27,11 +27,12 @@ public final class AnnounceCommand extends SimpleCommand {
 
 	@Override
 	protected void onCommand() {
-		val input = joinRange((args[0].equals(MessageUtil.getToastArg()) ? 2 : 1), args);
-		if (args[0].equals(MessageUtil.getToastArg()))
-			Common.dispatchCommandAsPlayer(getPlayer(), "bu notify all " + args[0] + " " + args[1] + " " + input);
+		val messageType = args[0];
+		val input = joinRange((messageType.equals(MessageUtil.getToastArg()) ? 2 : 1), args);
+		if (messageType.equals(MessageUtil.getToastArg()))
+			Common.dispatchCommandAsPlayer(getPlayer(), "bu notify all " + messageType + " " + args[1] + " " + input);
 		else
-			Common.dispatchCommandAsPlayer(getPlayer(), "bu notify all " + args[0] + " " + input);
+			Common.dispatchCommandAsPlayer(getPlayer(), "bu notify all " + messageType + " " + input);
 	}
 
 	@Override
