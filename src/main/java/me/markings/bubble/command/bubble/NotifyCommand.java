@@ -14,7 +14,7 @@ import org.mineacademy.fo.remain.Remain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationCommand extends SimpleSubCommand {
+public class NotifyCommand extends SimpleSubCommand {
 
 	private static final String noPermissionMsg = "&cYou don't have permission to execute this command!";
 
@@ -24,7 +24,7 @@ public class NotificationCommand extends SimpleSubCommand {
 	private static final String bossbarArg = MessageUtil.getBossbarArg();
 	private static final String toastArg = MessageUtil.getToastArg();
 
-	public NotificationCommand() {
+	public NotifyCommand() {
 		super("notify");
 
 		setMinArguments(3);
@@ -99,7 +99,7 @@ public class NotificationCommand extends SimpleSubCommand {
 	protected List<String> tabComplete() {
 		switch (args.length) {
 			case 1:
-				return completeLastWord("player_name", "all");
+				return completeLastWord("all", Common.getPlayerNames(true));
 			case 2:
 				return completeLastWord(messageArg, titleArg, actionbarArg, bossbarArg, toastArg);
 			case 3:

@@ -20,7 +20,7 @@ public final class BubbleGroup extends SimpleCommandGroup {
 
 	@Override
 	protected void registerSubcommands() {
-		registerSubcommand(new NotificationCommand());
+		registerSubcommand(new NotifyCommand());
 		registerSubcommand(new ReloadCommand());
 		registerSubcommand(new AddCommand());
 		registerSubcommand(new RemoveCommand());

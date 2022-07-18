@@ -8,7 +8,6 @@ import me.markings.bubble.settings.Broadcasts;
 import me.markings.bubble.settings.Localization;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mineacademy.fo.Messenger;
@@ -24,7 +23,7 @@ public class PermissionPrompt extends SimplePrompt {
 
 	@Override
 	protected String getPrompt(final ConversationContext context) {
-		Remain.sendTitle((Player) context.getForWhom(), "&9Set Permission", "Please type your message in the chat.");
+		Remain.sendTitle(getPlayer(context), "&9Set Permission", "Please type your message in the chat.");
 		return Localization.PromptMessages.PERMISSION_PROMPT_MESSAGE;
 	}
 
@@ -35,7 +34,7 @@ public class PermissionPrompt extends SimplePrompt {
 
 	@Override
 	protected boolean isInputValid(final ConversationContext context, final String input) {
-		return Valid.isInteger(input);
+		return !Valid.isNumber(input);
 	}
 
 	@Override
@@ -47,6 +46,7 @@ public class PermissionPrompt extends SimplePrompt {
 	@Override
 	protected Prompt acceptValidatedInput(@NotNull final ConversationContext context, @NotNull final String input) {
 		Broadcasts.getBroadcast(EditCommand.getInput()).setPermission(input);
+		Messenger.success(getPlayer(context), "Successfully set permission to " + input + "!");
 
 		return Prompt.END_OF_CONVERSATION;
 	}

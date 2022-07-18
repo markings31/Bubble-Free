@@ -89,14 +89,12 @@ public class BroadcastTask extends BukkitRunnable {
 				return;
 			}
 
-			message = Boolean.TRUE.equals(Settings.BroadcastSettings.CENTER_ALL) ? ChatUtil.center(message) : message;
-
-			if (Boolean.TRUE.equals(Broadcasts.getCenteredFromMessage(messages)))
-				message = ChatUtil.center(message);
+			if (Boolean.TRUE.equals(Broadcasts.getCenteredFromMessage(messages)) || Boolean.TRUE.equals(Settings.BroadcastSettings.CENTER_ALL))
+				message = ChatUtil.center(MessageUtil.translateGradient(message));
 
 			message = Variables.replace(message, player);
 
-			Common.tellNoPrefix(player, MessageUtil.translateGradient(message));
+			Common.tellNoPrefix(player, message);
 		});
 		Common.tellNoPrefix(player, "&f", MessageUtil.translateGradient(footer));
 	}

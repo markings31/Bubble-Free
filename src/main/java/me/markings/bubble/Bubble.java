@@ -8,7 +8,7 @@ import me.markings.bubble.model.Placeholders;
 import me.markings.bubble.mysql.BubbleDatabase;
 import me.markings.bubble.settings.Broadcasts;
 import me.markings.bubble.settings.DatabaseFile;
-import me.markings.bubble.settings.MenuSettings;
+import me.markings.bubble.settings.MenuData;
 import me.markings.bubble.settings.Settings;
 import me.markings.bubble.tasks.BroadcastTask;
 import org.mineacademy.fo.Common;
@@ -39,11 +39,6 @@ public final class Bubble extends SimplePlugin {
 		Settings.WelcomeSettings.JOIN_MOTD.clear();
 
 		DatabaseFile.getInstance().reload();
-
-		MenuSettings.PreferencesMenuSettings.getInstance().reload();
-		MenuSettings.ChatMenuSettings.getInstance().reload();
-		MenuSettings.MOTDMenuSettings.getInstance().reload();
-		MenuSettings.MentionsMenuSettings.getInstance().reload();
 	}
 
 	@Override
@@ -86,11 +81,7 @@ public final class Bubble extends SimplePlugin {
 
 		DatabaseFile.getInstance().saveToMap();
 		Broadcasts.loadBroadcasts();
-
-		MenuSettings.PreferencesMenuSettings.getInstance().save();
-		MenuSettings.ChatMenuSettings.getInstance().save();
-		MenuSettings.MOTDMenuSettings.getInstance().save();
-		MenuSettings.MentionsMenuSettings.getInstance().save();
+		MenuData.loadMenus();
 	}
 
 	@Override

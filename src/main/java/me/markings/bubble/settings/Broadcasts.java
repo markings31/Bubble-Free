@@ -129,7 +129,7 @@ public final class Broadcasts extends YamlConfig {
 	public void addLineToBroadcast(final String message) {
 		val broadcast = broadcasts.findItem(broadcastName);
 		if (broadcast == null) {
-			createBroadcast(broadcastName, Collections.singletonList(message), "bubble.vip", false, Collections.singletonList("world"));
+			createBroadcast(broadcastName, Collections.singletonList(message), "bubble.example", false, Collections.singletonList("world"));
 			return;
 		}
 
@@ -144,7 +144,7 @@ public final class Broadcasts extends YamlConfig {
 	public void removeLineFromBroadcast(final int index) {
 		val broadcast = broadcasts.findItem(broadcastName);
 		if (broadcast == null) {
-			createBroadcast(broadcastName, Collections.singletonList(""), "bubble.vip", false, Collections.singletonList("world"));
+			createBroadcast(broadcastName, Collections.singletonList(""), "bubble.example", false, Collections.singletonList("world"));
 			return;
 		}
 
@@ -159,7 +159,7 @@ public final class Broadcasts extends YamlConfig {
 	public void toggleCentered() {
 		val broadcast = broadcasts.findItem(broadcastName);
 		if (broadcast == null) {
-			createBroadcast(broadcastName, Collections.singletonList(""), "bubble.vip", false, Collections.singletonList("world"));
+			createBroadcast(broadcastName, Collections.singletonList(""), "bubble.example", false, Collections.singletonList("world"));
 			return;
 		}
 

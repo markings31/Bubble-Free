@@ -1,14 +1,15 @@
 package me.markings.bubble.command;
 
-import me.markings.bubble.menu.NotificationsMenu;
+import lombok.val;
 import me.markings.bubble.model.Permissions;
+import me.markings.bubble.settings.MenuData;
 import org.mineacademy.fo.annotation.AutoRegister;
 import org.mineacademy.fo.command.SimpleCommand;
 
 @AutoRegister
-public final class PrefsCommand extends SimpleCommand {
+public final class PreferencesCommand extends SimpleCommand {
 
-	public PrefsCommand() {
+	public PreferencesCommand() {
 		super("notifications|notifprefs|alerts");
 
 		setDescription("Customize your notification preferences.");
@@ -18,6 +19,9 @@ public final class PrefsCommand extends SimpleCommand {
 	@Override
 	protected void onCommand() {
 		checkConsole();
-		new NotificationsMenu().displayTo(getPlayer());
+		val menuName = MenuData.getMenuNames().toArray()[0].toString();
+		val menu = MenuData.findMenu(menuName);
+
+		menu.displayTo(getPlayer());
 	}
 }

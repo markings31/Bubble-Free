@@ -23,11 +23,10 @@ public class CenterCommand extends SimpleSubCommand {
 	protected void onCommand() {
 		val label = args[0];
 
-		if (args[0].equalsIgnoreCase("all")) {
+		if (args[0].equalsIgnoreCase("all"))
 			Broadcasts.toggleCenteredAll();
-		} else {
+		else
 			Broadcasts.getBroadcast(label).toggleCentered();
-		}
 
 		tellSuccess("&aSuccessfully toggled centering for broadcast " + label + "!");
 	}
@@ -36,7 +35,7 @@ public class CenterCommand extends SimpleSubCommand {
 	protected String[] getMultilineUsageMessage() {
 		val commandLabel = "&f/bu " + getSublabel();
 		return new String[]{
-				commandLabel + " <label>&7 - Centers the messages contained in the 'label' section.",
+				commandLabel + " <label>&7 - Centers the messages contained in the 'label' file.",
 				commandLabel + " all&7 - Centers all messages across different sections.",
 				"&f",
 				"&c&lNOTE:&c 'label' refers to the name of the broadcast section."

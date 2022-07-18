@@ -45,7 +45,9 @@ public class MessageUtil {
 	private static final String flashPlaceholder = "{flash:";
 	//private static final String scrollingGradientPlaceholder = "{g:";
 
-	private static final String gradientPattern = "^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}):([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+	private static final String gradientEndPlaceholder = "</>";
+
+	private static final String gradientPattern = "^([A-Fa-f\\d]{6}|[A-Fa-f\\d]{3}):([A-Fa-f\\d]{6}|[A-Fa-f\\d]{3})$";
 
 	public static String format(final String message) {
 		val fancyLinePlaceholder = "{fancy_line}";
@@ -58,16 +60,16 @@ public class MessageUtil {
 	public static List<String> getTitleFrames(final String message) {
 		final char[] msgArray = message.toCharArray();
 		final ArrayList<String> frames;
-		final ArrayList<Integer> indicies;
+		final ArrayList<Integer> indices;
 		val hasPeriod = getPeriod(message) != -1;
-		indicies = IntStream
+		indices = IntStream
 				.range(0, msgArray.length).filter(i -> msgArray[i] == ':' && msgArray[i - 1] != 't')
 				.boxed()
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		frames = IntStream
-				.range(0, (hasPeriod ? indicies.size() - 1 : indicies.size())).
-				mapToObj(i -> message.substring(indicies.get(i) + 1, i == indicies.size() - 1 ? message.indexOf('}') : indicies.get(i + 1)))
+				.range(0, (hasPeriod ? indices.size() - 1 : indices.size())).
+				mapToObj(i -> message.substring(indices.get(i) + 1, i == indices.size() - 1 ? message.indexOf('}') : indices.get(i + 1)))
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		return frames;
@@ -105,12 +107,12 @@ public class MessageUtil {
 
 	public static String getLastMessage(final String message) {
 		val msgArray = message.toCharArray();
-		final List<Integer> indicies = new ArrayList<>();
+		final List<Integer> indices = new ArrayList<>();
 		for (int i = message.length() - 1; i > 0; i--)
 			if (msgArray[i] == ':')
-				indicies.add(i);
+				indices.add(i);
 
-		return message.substring(indicies.get(1) + 1, indicies.get(0));
+		return message.substring(indices.get(1) + 1, indices.get(0));
 	}
 
 	public static String translateGradient(final String message) {
@@ -119,11 +121,16 @@ public class MessageUtil {
 		if (containsGradient(newMessage)) {
 			val firstColor = "#" + newMessage.substring(newMessage.indexOf(":") - 6, newMessage.indexOf(":"));
 			val secondColor = "#" + newMessage.substring(newMessage.indexOf(":") + 1, newMessage.indexOf(":") + 7);
-			val previousMessage = newMessage.substring(0, newMessage.indexOf(":") - 6);
-			val followingMessage = newMessage.substring(newMessage.indexOf(":") + 7);
+			val previousMessage = newMessage.substring(0, newMessage.indexOf(":") - 7);
+			val translatedMessage = newMessage.substring(newMessage.indexOf(":") + 7,
+					newMessage.contains(gradientEndPlaceholder) ? newMessage.indexOf(gradientEndPlaceholder) : newMessage.length()).replace(">", "");
+			val followingMessage = Common.lastColor(message)
+					+ newMessage.substring(newMessage.contains(gradientEndPlaceholder)
+					? newMessage.indexOf(gradientEndPlaceholder) + 3
+					: newMessage.length());
 
-			return getPlaceholder(message) + previousMessage + ChatUtil.generateGradient(followingMessage,
-					CompChatColor.of(firstColor), CompChatColor.of(secondColor)) + "&r";
+			return getPlaceholder(message) + previousMessage + ChatUtil.generateGradient(translatedMessage,
+					CompChatColor.of(firstColor), CompChatColor.of(secondColor)) + "&r" + followingMessage;
 		}
 
 		return message;
@@ -210,7 +217,7 @@ public class MessageUtil {
 
 	public static boolean containsGradient(final String message) {
 		final String gradientPrefix;
-		if (message.contains(":")) {
+		if (message.contains(":") && message.contains(gradientEndPlaceholder)) {
 			gradientPrefix = message.substring(message.indexOf(":") - 6, message.indexOf(":") + 7);
 
 			return gradientPrefix.matches(gradientPattern);
